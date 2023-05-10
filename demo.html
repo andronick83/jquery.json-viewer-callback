@@ -1,0 +1,106 @@
+<!doctype HTML>
+<html>
+<head>
+
+<title>jQuery json-viewer-callback</title>
+
+<style>
+body{padding:0;margin:0;height:100%;line-height:20px;background-color:#e9e9e9;padding-top:20px;font-family:monospace}.ease{transition:all 0.3s ease-in-out}
+.dark{filter:invert(100%) contrast(100%) brightness(100%)}.dark .no-invert{filter:invert(100%) contrast(100%) brightness(100%)}
+.navi{position:fixed;z-index:999;top:0;left:0;right:0;height:20px;background-color:white;padding:0 4px;box-shadow:0 2px 4px rgba(0,0,0,.08)}
+.page{margin:8px;padding:4px;background-color:white;border:1px solid rgba(0,0,0,.1)}.fright{float:right}
+.page>div{margin-bottom:4px!important}
+pre{margin:0px}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+var page=function(){};
+page.getCookie=(name,def=undefined)=>{var matches=document.cookie.match(new RegExp("(?:^|; )"+name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g,'\\$1')+"=([^;]*)"));return matches?decodeURIComponent(matches[1]):def};
+page.invert=()=>{page.dark=!page.dark;document.cookie="dark="+(+page.dark);page.dark?$('html').addClass('dark'):$('html').removeClass('dark')};
+page.dark=!parseInt(page.getCookie('dark'/*,window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches?1:0*/));
+page.invert();
+$(function($){
+	$('html').addClass('ease');
+	var navi=$('<div class=navi>').append('<b>jQuery JSON Viewer with Callbacks</b>');
+	var menu=$('<span class=fright>');
+	menu.append('<a href=# class=ico-dark onclick=page.invert(true)>invert</a>');
+	navi.append(menu).prependTo('body');
+});
+</script>
+
+
+<!-- jQuery JSON-viewer with Calbbacks -->
+
+<!-- JSON.stringify
+<script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json2.min.js"></script>-->
+
+<script src="jvc.js"></script>
+<link rel=stylesheet href="jvc.css"/>
+
+<script>
+$(function($){
+	
+	// JVC Style override: (https://cdnjs.com/libraries/highlight.js)
+	//JVC.setStyle('night-owl');
+	
+	// JVC Object:
+	json = {
+		"testObject": {
+			"null": null,
+			"true": true,
+			"false": false,
+			"undefined": undefined,
+			"text": "\"text&nbsp;'text'\t`text`<br>\ntext\"",
+			"url": "http://example.com/",
+			"array": [0, 0.1, 2, [], {}],
+			"function": function(a,b){return a+b},
+			"arrowFunction": (a,b)=>{return a-b}
+		},
+		"ajaxCallback": {"jvc-cb": "/file.json"},
+		"slowCallback": {"jvc-cb": "/slow"},
+		"failCallback": {"jvc-cb": "/fail"}
+	};
+	
+	// JVC Callback:
+	var jsonAjax=function(data,cb){
+		if(data=='/slow')return setTimeout(cb, 10*1000, ['json-slow']);
+		$.ajax(data)
+		.done(cb)
+		.fail(function(xhr, status, err){
+			cb({"jvc-fail": status+' ('+(err? err :xhr.status)+')'}) }
+	)};
+	
+	// JVC Conf (key,invertColors,withLinks,bigNumbers,withQuotes,commentSelect,tab,collapsed,showConf,showJSON,debug,error,callback,onChange)
+	conf = {collapsed: 2, callback: jsonAjax};
+	
+	// JVC Object print
+	$('#jvc1').JVC(json, conf);
+	
+	
+	// JVC NoObject print
+	conf.key = 'string';
+	$('#jvc2').JVC("Hello\n\tworld!<br>\n", conf);
+	
+	// JVC Logs, Triggers
+	conf = Object.assign(conf,{key: "object", showConf: true, showJSON: true, withQuotes: true, commentSelect: true, collapsed: true})
+	conf.onChange = function(element,json){
+		console.log('jvc-change', element);
+		console.log(json);
+	}
+	json = [1, {"a": 3, "<br>\n": "<br>\n"}];
+	$('#jvc3').JVC(json, conf);
+});
+</script>
+
+</head>
+<body>
+
+<div class=page>
+	<div id=jvc1></div>
+	<div id=jvc2></div>
+	<div id=jvc3></div>
+</div>
+
+</body>
+</html>
