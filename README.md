@@ -4,6 +4,8 @@
 
 jQuery JSON-Viewer with callbacks
 
+[Demo page](https://andronick83.github.io/demo.html)
+
 ![Screenshot](jvc-screenshot.png)
 
 Example:
