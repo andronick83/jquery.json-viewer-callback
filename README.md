@@ -36,7 +36,7 @@ $(function($){
 			"function": function(a,b){return a+b},
 			"arrowFunction": (a,b)=>{return a-b}
 		},
-		"ajaxCallback": {"jvc-cb": "/ajax"},
+		"ajaxCallback": {"jvc-cb": "/file.json"},
 		"slowCallback": {"jvc-cb": "/slow"},
 		"failCallback": {"jvc-cb": "/fail"}
 	};
@@ -47,7 +47,7 @@ $(function($){
 		$.ajax(data)
 		.done(cb)
 		.fail(function(xhr, status, err){
-			cb({"jvc-fail": status+' ('+(xhr.responseText? xhr.responseText :(err? err :xhr.status))+')'}) }
+			cb({"jvc-fail": status+' ('+(err? err :xhr.status)+')'}) }
 	)};
 	
 	// JVC Conf (key,invertColors,withLinks,bigNumbers,withQuotes,commentSelect,tab,collapsed,showConf,showJSON,debug,error,callback,onChange)
