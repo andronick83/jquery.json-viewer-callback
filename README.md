@@ -1,9 +1,9 @@
 # jquery.json-viewer-callback
 
 ![github](https://img.shields.io/github/license/andronick83/jquery.json-viewer-callback)
-<!-- ![GitHub all releases](https://img.shields.io/github/downloads/andronick83/jquery.json-viewer-callback/total) -->
+![GitHub all releases](https://img.shields.io/github/downloads/andronick83/jquery.json-viewer-callback/total)
 
-jQuery **J**SON-**V**iewer with **C**allbacks (**JVC**)
+jQuery JSON-Viewer with Callbacks (**JVC**)
 
 [Demo page](https://andronick83.github.io/jquery.json-viewer-callback/demo.html)
 
