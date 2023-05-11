@@ -4,7 +4,7 @@
 
 jQuery JSON-Viewer with callbacks
 
-[Demo page](https://andronick83.github.io/demo.html)
+[Demo page](https://andronick83.github.io/jquery.json-viewer-callback/demo.html)
 
 ![Screenshot](jvc-screenshot.png)
 
