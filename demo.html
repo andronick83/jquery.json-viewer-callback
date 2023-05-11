@@ -8,23 +8,23 @@
 body{color:white;padding:0;margin:0;height:100%;line-height:20px;background-color:#161616;padding-top:20px;font-family:monospace}.ease{transition:all 0.3s ease-in-out}
 .dark{filter:invert(100%) contrast(100%) brightness(100%)}.dark .no-invert{filter:invert(100%) contrast(100%) brightness(100%)}
 .navi{position:fixed;z-index:999;top:0;left:0;right:0;height:20px;background-color:black;padding:0 4px;box-shadow:0 2px 4px rgba(255,255,255,.08)}
+.navi .ico{margin:2px;width:16px;height:16px;display:inline-block;cursor:pointer;background-size:cover}.navi .ico-sun{background-image:url(/sun.png);}
 .page{margin:8px;padding:4px;background-color:black;border:1px solid rgba(255,255,255,.1);border-radius:6px}.fright{float:right}
-.page>*{margin-bottom:4px}.page>*:last-child{margin:0}
-pre{margin:0px}
+.page>*{margin-bottom:4px}.page>*:last-child{margin:0}pre{margin:0px}
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script>
 var page=function(){};
 page.getCookie=(name,def=undefined)=>{var matches=document.cookie.match(new RegExp("(?:^|; )"+name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g,'\\$1')+"=([^;]*)"));return matches?decodeURIComponent(matches[1]):def};
-page.invert=()=>{page.dark=!page.dark;document.cookie="dark="+(+page.dark);page.dark?$('html').addClass('dark'):$('html').removeClass('dark');return false};
+page.invert=()=>{page.dark=!page.dark;document.cookie="dark="+(+page.dark);page.dark?$('html').addClass('dark'):$('html').removeClass('dark')};
 page.dark=!parseInt(page.getCookie('dark'/*,window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches?1:0*/));
 page.invert();
 $(function($){
 	$('html').addClass('ease');
 	var navi=$('<div class=navi>').append('<b>jQuery JSON Viewer with Callbacks</b>');
 	var menu=$('<span class=fright>');
-	menu.append('<a href=# class=ico-dark onclick="return page.invert(true)">invert</a>');
+	menu.append('<span class="ico ico-sun" onclick=page.invert(true)></span>');
 	navi.append(menu).prependTo('body');
 });
 </script>
