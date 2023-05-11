@@ -81,5 +81,5 @@ $(function($){
 
 ## About
 
-- Author: [andronick83](andronick.mail@gmail.com)
+- Author: [andronick83](mailto:andronick.mail@gmail.com)
 - License: [MIT License](http://opensource.org/licenses/MIT)
