@@ -1,12 +1,12 @@
 # jquery.json-viewer-callback
 
-![npm](https://img.shields.io/npm/l/jquery.json-viewer.svg)
+![github](https://img.shields.io/github/license/andronick83/jquery.json-viewer-callback)
 
 jQuery **J**SON-**V**iewer with **C**allbacks (**JVC**)
 
 [Demo page](https://andronick83.github.io/jquery.json-viewer-callback/demo.html)
 
-![Screenshot](screenshot.png)
+![Screenshot](screenshot.png?)
 
 Example:
 ```html
@@ -81,5 +81,5 @@ $(function($){
 
 ## About
 
-- Author: [andronick83](mailto:andronick.mail@gmail.com)
+- Author: [andronick83.mail@gmail.com](mailto:andronick.mail@gmail.com)
 - License: [MIT License](http://opensource.org/licenses/MIT)
