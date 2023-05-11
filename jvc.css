@@ -15,7 +15,7 @@
 .jvc-menu{user-select:none;float:right;position:relative;right:0;top:0;border-radius:4;border-color:rgba(255,255,255,0.2);height:20px;}
 
 /* list */
-.jvc-list{display:none;border-left:1px dotted #cbc0bc;padding-left:34.616px}
+.jvc-list{display:none;border-left:1px dotted #343f43;padding-left:34.616px}
 .jvc-root-list{display:block;margin:14px 0}
 .jvc-toggle>.jvc-list{display:block}
 .jvc-toggle:hover>.jvc-list{border-color:#818e96}
@@ -31,7 +31,7 @@
 .jvc-toggle>.hljs-attr::before{position:absolute;display:inline-block;left:-23px;width:18px;height:18px;
 	color:#343f43;content:"\25BC";transition:transform 0.2s;text-align:center;}
 .jvc-toggle.jvc-collapsed>.hljs-attr::before{transform:rotate(-90deg)}
-.jvc-toggle:hover>.hljs-attr::before{color:#818e96}
+.jvc-toggle:hover>.hljs-attr::before{color:#cbc0bc}
 
 .jvc-callback>.hljs-attr::before{content:"\21BB"}
 .jvc-callback.jvc-collapsed>.hljs-attr::before{transform:rotate(-360deg)}
@@ -87,7 +87,7 @@
 .hljs-title{color:#dcdcaa;font-style:normal}
 .hljs-comment{color:#343f43;font-style:italic}
 .hljs-comment:hover{color:#818e96}
+.hljs-attr{color:#678cb1}
 .-jvc-item:hover>.hljs-comment{color:#818e96;background-color:rgba(255,255,255,0.05)}
 .-jvc-item:hover:not(:has(.jvc-list:hover))>.jvc-value>.hljs-comment{color:#818e96}
-.hljs-attr{color:#678cb1}
 /**/
