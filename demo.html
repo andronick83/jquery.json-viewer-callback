@@ -8,9 +8,14 @@
 body{color:white;padding:0;margin:0;height:100%;line-height:20px;background-color:#161616;padding-top:20px;font-family:monospace}.ease{transition:all 0.3s ease-in-out}
 .dark{filter:invert(100%) contrast(100%) brightness(100%)}.dark .no-invert{filter:invert(100%) contrast(100%) brightness(100%)}
 .navi{position:fixed;z-index:999;top:0;left:0;right:0;height:20px;background-color:black;padding:0 4px;box-shadow:0 2px 4px rgba(255,255,255,.08)}
-.navi .ico{margin:2px;width:16px;height:16px;display:inline-block;cursor:pointer;background-size:cover}.navi .ico-sun{background-image:url(/sun.png);}
+.navi .ico{margin:2px;width:16px;height:16px;display:inline-block;cursor:pointer;background-size:cover}
+.navi .ico-sun{background-image:url(/sun.png)}
+.navi select{height:18px;font-size:12px;font-family:monospace;vertical-align:top;background-color:black;color:white;margin:1px;padding:0 4px;border:solid 1px gray;}
+.navi select>option{font-size:12px;background-color:black;font-weight:normal}
+.dark .navi>select>option{background-color:white;color:black}
 .page{margin:8px;padding:4px;background-color:black;border:1px solid rgba(255,255,255,.1);border-radius:6px}.fright{float:right}
-.page>*{margin-bottom:4px}.page>*:last-child{margin:0}pre{margin:0px}
+.page>*{margin-bottom:4px}.page>*:last-child{margin:0}
+pre{margin:0px}
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -26,6 +31,13 @@ $(function($){
 	var menu=$('<span class=fright>');
 	menu.append('<span class="ico ico-sun" onclick=page.invert(true)></span>');
 	navi.append(menu).prependTo('body');
+	setTimeout(()=>{
+		$.ajax('https://api.cdnjs.com/libraries/highlight.js?fields=assets').done(function(d){
+		var files=d.assets[0].files;
+		var styles=[$("<option/>",{text:'jvc-default',selected:'selected'})],s;
+		for(i in files){s=files[i].match(/^styles\/(.+)\.min\.css$/);if(s)styles.push($("<option/>",{text:s[1]}))}
+		var select=$('<select>');
+		select.append(styles).prependTo(menu).on('change',function(a,b,c){var s=select.val();JVC.setStyle(select.val())})})},0);
 });
 </script>
 
