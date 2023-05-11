@@ -9,10 +9,10 @@ JVC.isUrl=(s)=>{try{let url=new URL(s);return url.protocol==="http:"||url.protoc
 JVC.objDiff=(d,o)=>{var r={};for(const[k,v]of Object.entries(d))if((k in o)&&v!==o[k])r[k]=o[k];return r};
 JVC.tabWidth=(o)=>{var e=$('<span style=overflow:visible>').append(o.tab.repeat(100)).appendTo('.jvc'),w=e.width()/100;e.remove();return w};
 JVC.htmlEscape=(s)=>{return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&apos;').replace(/"/g,'&quot;')};
-JVC.setStyle=(s)=>{$('.jvc-style').remove();
-	if(s=='jvc-default')return $('<style class=jvc-style>').append(JVC.style).appendTo('head');
-	if(!JVC.isUrl(s))s='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/'+s+'.min.css';
-	$('<link rel=stylesheet class=jvc-style>').attr('href',s).appendTo('head')};
+JVC.setStyle=(s)=>{if(s=='jvc-default')var d=$('<style>').append(JVC.style);
+	else{if(!JVC.isUrl(s))s='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/'+s+'.min.css';
+		var d=$('<link rel=stylesheet>').attr('href',s)}
+	d.appendTo('head');setTimeout(function(){$('.jvc-style').remove();d.addClass('jvc-style')},100)};
 JVC.defs={key:undefined,invertColors:false,withLinks:true,bigNumbers:false,withQuotes:false,commentSelect:false,tab:"\t",
 	collapsed:false,showConf:false,showJSON:false,debug:console.debug,error:console.error,callback:null,onChange:null};
 JVC.style='.hljs{background-color:#293134;color:#e0e2e4}.hljs-keyword{color:#93c763;font-style:normal}.hljs-number{color:#ffcd22}.hljs-string{color:#ec7600}.hljs-title{color:#dcdcaa;font-style:normal}.hljs-comment{color:#343f43;font-style:italic}.hljs-comment:hover{color:#818e96}.hljs-attr{color:#678cb1}';
