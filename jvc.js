@@ -43,7 +43,7 @@ JVC.defs={key:undefined,invertColors:false,withLinks:true,bigNumbers:false,withQ
 		if(typeof key!=='undefined'){
 			dom.$property.append(JVC.htmlEscape(JSON.stringify(key).slice(1,-1)));
 			$colon=domPunctuation();
-			if(level){dom.$property.prepend(domQuote).append(domQuote);$colon.append(':',domSpace())}
+			if(level){dom.$property.prepend(domQuote).append(domQuote);$colon.append(':',domSpace(' '))}
 			else $colon.append(domSpace(' '),'=',domSpace(' '));
 			if(key==='jvc-fail')dom.$value.addClass('jvc-fail')}
 		//
