@@ -10,10 +10,12 @@ JVC.objDiff=(d,o)=>{var r={};for(const[k,v]of Object.entries(d))if((k in o)&&v!=
 JVC.tabWidth=(o)=>{var e=$('<span style=overflow:visible>').append(o.tab.repeat(100)).appendTo('.jvc'),w=e.width()/100;e.remove();return w};
 JVC.htmlEscape=(s)=>{return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&apos;').replace(/"/g,'&quot;')};
 JVC.setStyle=(s)=>{$('.jvc-style').remove();
+	if(s=='jvc-default')return $('<style class=jvc-style>').append(JVC.style).appendTo('head');
 	if(!JVC.isUrl(s))s='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/'+s+'.min.css';
 	$('<link rel=stylesheet class=jvc-style>').attr('href',s).appendTo('head')};
 JVC.defs={key:undefined,invertColors:false,withLinks:true,bigNumbers:false,withQuotes:false,commentSelect:false,tab:"\t",
 	collapsed:false,showConf:false,showJSON:false,debug:console.debug,error:console.error,callback:null,onChange:null};
+JVC.style='.hljs{background-color:#293134;color:#e0e2e4}.hljs-keyword{color:#93c763;font-style:normal}.hljs-number{color:#ffcd22}.hljs-string{color:#ec7600}.hljs-title{color:#dcdcaa;font-style:normal}.hljs-comment{color:#343f43;font-style:italic}.hljs-comment:hover{color:#818e96}.hljs-attr{color:#678cb1}';
 
 (function($){
 	//
@@ -166,7 +168,7 @@ JVC.defs={key:undefined,invertColors:false,withLinks:true,bigNumbers:false,withQ
 	$.fn.JVC=function(obj,conf){
 		var options=Object.assign({},JVC.defs,conf);
 		if(options.debug)options.debug('JVC',{'obj':obj,'options':options});
-		if(!$('.jvc-style').length)$('<style class=jvc-style>').append('.hljs{background-color:#293134;color:#e0e2e4}.hljs-keyword{color:#93c763;font-style:normal}.hljs-number{color:#ffcd22}.hljs-string{color:#ec7600}.hljs-title{color:#dcdcaa;font-style:normal}.hljs-comment{color:#343f43;font-style:italic}.hljs-comment:hover{color:#818e96}.hljs-attr{color:#678cb1}').appendTo('head');
+		if(!$('.jvc-style').length)JVC.setStyle('jvc-default');
 		return this.each(function(){
 			var $doc=$('<div class="jvc hljs">').appendTo($(this).empty()).data('options',options);
 			if(!options.withQuotes)$doc.addClass('jvc-no-quotes');
