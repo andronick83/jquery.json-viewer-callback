@@ -2,7 +2,7 @@
 
 ![npm](https://img.shields.io/npm/l/jquery.json-viewer.svg)
 
-jQuery JSON-Viewer with callbacks
+jQuery **J**SON-**V**iewer with **C**allbacks
 
 [Demo page](https://andronick83.github.io/jquery.json-viewer-callback/demo.html)
 
