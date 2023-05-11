@@ -4,7 +4,7 @@
  * @link: https://github.com/andronick83/jquery.json-viewer-callback
  */
 
-JVC={};
+var JVC={};
 JVC.isUrl=(s)=>{try{let url=new URL(s);return url.protocol==="http:"||url.protocol==="https:"}catch(_){return false}};
 JVC.objDiff=(d,o)=>{var r={};for(const[k,v]of Object.entries(d))if((k in o)&&v!==o[k])r[k]=o[k];return r};
 JVC.tabWidth=(o)=>{var e=$('<span style=overflow:visible>').append(o.tab.repeat(100)).appendTo('.jvc'),w=e.width()/100;e.remove();return w};
