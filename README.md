@@ -1,6 +1,7 @@
 # jquery.json-viewer-callback
 
 ![github](https://img.shields.io/github/license/andronick83/jquery.json-viewer-callback)
+<!-- ![GitHub all releases](https://img.shields.io/github/downloads/andronick83/jquery.json-viewer-callback/total) -->
 
 jQuery **J**SON-**V**iewer with **C**allbacks (**JVC**)
 
@@ -81,5 +82,5 @@ $(function($){
 
 ## About
 
-- Author: [andronick83.mail@gmail.com](mailto:andronick.mail@gmail.com)
-- License: [MIT License](http://opensource.org/licenses/MIT)
+- Author: [andronick83.mail@gmail.com](mailto:andronick.mail@gmail.com) :shipit:
+- License: [MIT License](http://opensource.org/licenses/MIT) :+1:
