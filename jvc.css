@@ -75,7 +75,7 @@
 
 /* colors */
 .jvc a{color:inherit}
-.jvc-log{color:#818e96;font-style:italic;margin:14px 34.616px;background-color:rgba(255,255,255,0.05);display:block}
+.jvc-log{color:#818e96;font-style:italic;margin:14px 14px 14px 34.616px;display:block}
 .jvc-fail{background-color:rgba(255,0,0,0.1)}
 .jvc-fail:hover{background-color:rgba(255,0,0,0.2)!important}
 
