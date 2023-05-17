@@ -3,29 +3,39 @@
 ![github](https://img.shields.io/github/license/andronick83/jquery.json-viewer-callback)
 ![GitHub all releases](https://img.shields.io/github/downloads/andronick83/jquery.json-viewer-callback/total)
 
-jQuery JSON-Viewer with Callbacks (**JVC**)
-
-[Demo page](https://andronick83.github.io/jquery.json-viewer-callback/demo.html)
+jQuery JSON Viewer With Callback Support (**JVC**)
 
 ![Screenshot](screenshot.png?)
 
+[Demo page](https://andronick83.github.io/jquery.json-viewer-callback/demo.html)
+
 Example:
 ```html
-<!-- JSON.stringify
-<script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json2.min.js"></script> -->
-
+<html>
+<head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-<link rel=stylesheet href="jvc.css"/>
-<script src="jvc.js"></script>
+
+<link rel=stylesheet href="/jvc.css"/>
+<script src="/jvc.js"></script>
 
 <script>
 $(function($){
+
+	if(0){	// JVC Setters: 
+		JVC.setTabSize(2);		// Tab-Size (spaces)
+		JVC.setFontSize('12px');	// Font-Size
+		JVC.setFontFamily('monospace'); // Font-Family
+		JVC.setStyle('night-owl');	// no-style, jvc-default, night-owl, etc. https://cdnjs.com/libraries/highlight.js
+		
+		// JVC Getters:
+		var text=JVC.getJSON($('#JVC1').get(0));
+		
+		// JVC Triggers:
+		$('#JVC1').on('JVC:callback',function(element,jvc_data,callback){callback([1,2,3])});
+		$('#JVC1').on('JVC:change',function(doc){console.log(JVC.getJSON(doc))})	}
 	
-	// JVC Style override: (https://cdnjs.com/libraries/highlight.js)
-	//JVC.setStyle('night-owl');
-	
-	// JVC Object:
-	json = {
+	// JVC JSON-Object:
+	json1 = {
 		"testObject": {
 			"null": null,
 			"true": true,
@@ -37,47 +47,73 @@ $(function($){
 			"function": function(a,b){return a+b},
 			"arrowFunction": (a,b)=>{return a-b}
 		},
-		"ajaxCallback": {"jvc-cb": "/file.json"},
+		"ajaxCallback": {"jvc-cb": "/ajax"},
 		"slowCallback": {"jvc-cb": "/slow"},
-		"failCallback": {"jvc-cb": "/fail"}
+		"failCallback": {"jvc-cb": "/fail"},
+		"longCallback": {"jvc-cb": "https://cdn.jsdelivr.net/gh/herrstrietzel/fonthelpers@main/json/gfontsAPI.json"}
 	};
 	
 	// JVC Callback:
-	var jsonAjax=function(data,cb){
+	var jsonAjax=function(event, element, data, cb){
 		if(data=='/slow')return setTimeout(cb, 10*1000, ['json-slow']);
-		$.ajax(data)
-		.done(cb)
+		//
+		var ajax=data;
+		if(typeof data==='string')var ajax={url:data,dataType:"json"};
+		//
+		$.ajax(ajax).done(cb)
 		.fail(function(xhr, status, err){
-			cb({"jvc-fail": status+' ('+(err? err :xhr.status)+')'}) }
-	)};
+			cb({"jvc-fail": status+' ('+(err? err :xhr.status)+')'})
+		})
+	};
 	
-	// JVC Conf (key,invertColors,withLinks,bigNumbers,withQuotes,commentSelect,tab,collapsed,showConf,showJSON,debug,error,callback,onChange)
-	conf = {collapsed: 2, callback: jsonAjax};
+	// JVC Conf (key,invertColors,withLinks,bigNumbers,withQuotes,withFunctions,collapsed,showConf,showJSON,debug,error)
+	var conf = {collapsed: 2, withFunctions: true};
 	
-	// JVC Object print
-	$('#jvc1').JVC(json, conf);
+	// JVC Print Object:
+	$('#JVC1').JVC(json1, conf).on('JVC:callback', jsonAjax);
 	
+	// JVC Print String:
+	$('#JVC2').JVC("Hello\n\tworld!<br>\n", {key: "str"});
 	
-	// JVC NoObject print
-	conf.key = 'string';
-	$('#jvc2').JVC("Hello\n\tworld!<br>\n", conf);
+	// JVC Print Array:
+	var conf3 = {key: "obj", withQuotes: true, collapsed: true, showJSON: true};
+	var json3 = [1, {"a": 3, "<br>\n": "<br>\n"}];
+	$('#JVC3').JVC(json3, conf3).on('JVC:change', function(){
+		var json=JVC.getJSON(this);
+		console.debug("JVC:change", JSON.parse(json));
+	});
 	
-	// JVC Logs, Triggers
-	conf = Object.assign(conf,{key: "object", showConf: true, showJSON: true, withQuotes: true, commentSelect: true, collapsed: true})
-	conf.onChange = function(element,json){
-		console.log('jvc-change', element);
-		console.log(json);
-	}
-	json = [1, {"a": 3, "<br>\n": "<br>\n"}];
-	$('#jvc3').JVC(json, conf);
+	/*DEV*/
+	$('#JVC1').on('JVC:change', function(){
+		var json=JVC.getJSON(this);
+		console.debug("JVC-Check", 'OK', JSON.parse(json));
+	});
+	$('.jvc-tab-observer').css({'z-index':100,'position':'absolute','top':'20px','background-color':'#ff000080'});
+	var doc=$('#JVC1').get(0);
+	var logs=JVC.nLogs.cloneNode();logs.classList.add('jvc-json');doc.append(logs);
+	JVC.__nodeData(doc,'conf').showJSON=true;
+	var log=doc.querySelector('.jvc-logs.jvc-json');log.innerHTML='';
+	log.append("// JSON:\n"+JVC.getJSON(doc));
+	/*DEV*/
 });
 </script>
 
-<div class=page>
-	<div id=jvc1></div>
-	<div id=jvc2></div>
-	<div id=jvc3></div>
+</head>
+<body translate="no">
+
+<div class="page">
+	<span>JVC Object (with "JVC:callback" trigger and ajax loader):</span>
+	<div id=JVC1>JVC1</div>
+	
+	<span>JVC String:</span>
+	<div id=JVC2>JVC2</div>
+	
+	<span>JVC Array (with Quotes, Comments, Logs and "JVC:change" trigger):</span>
+	<div id=JVC3>JVC3</div>
 </div>
+
+</body>
+</html>
 ```
 
 ## About
