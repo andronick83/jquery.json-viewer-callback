@@ -5,205 +5,234 @@
  */
 
 var JVC={};
-JVC.isUrl=(s)=>{try{let url=new URL(s);return url.protocol==="http:"||url.protocol==="https:"}catch(_){return false}};
-JVC.objDiff=(d,o)=>{var r={};for(const[k,v]of Object.entries(d))if((k in o)&&v!==o[k])r[k]=o[k];return r};
-JVC.tabWidth=(o)=>{var e=$('<span style=overflow:visible>').append(o.tab.repeat(100)).appendTo('.jvc'),w=e.width()/100;e.remove();return w};
-JVC.htmlEscape=(s)=>{return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&apos;').replace(/"/g,'&quot;')};
-JVC.setStyle=(s)=>{if(s=='jvc-default')var d=$('<style>').append(JVC.style);
-	else{if(!JVC.isUrl(s))s='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/'+s+'.min.css';
-		var d=$('<link rel=stylesheet>').attr('href',s)}
-	d.appendTo('head');setTimeout(function(){$('.jvc-style').remove();d.addClass('jvc-style')},100)};
-JVC.defs={key:undefined,invertColors:false,withLinks:true,bigNumbers:false,withQuotes:false,commentSelect:false,tab:"\t",
+
+/* DEFAULTS */
+JVC.defOptions={key:undefined,invertColors:false,withLinks:true,bigNumbers:false,withQuotes:false,withFunctions:true,
 	collapsed:false,showConf:false,showJSON:false,debug:console.debug,error:console.error,callback:null,onChange:null};
-JVC.style='.hljs{background-color:#293134;color:#e0e2e4}.hljs-keyword{color:#93c763;font-style:normal}.hljs-number{color:#ffcd22}.hljs-string{color:#ec7600}.hljs-title{color:#dcdcaa;font-style:normal}.hljs-comment{color:#343f43;font-style:italic}.hljs-comment:hover{color:#818e96}.hljs-attr{color:#678cb1}';
+JVC.defFontFamily='"Source Code Pro",monospace';
+JVC.defStyle=`
+.hljs{background-color:#293134;color:#e0e2e4}
+.hljs-keyword{color:#93c763;font-style:normal}
+.hljs-number{color:#ffcd22}
+.hljs-string{color:#ec7600}
+.hljs-title{color:#dcdcaa;font-style:normal}
+.hljs-attr{color:#678cb1}
+.hljs-comment{color:#818e96;font-style:italic}`;
+
+/* SETTERS */
+JVC.setProperty=(n,v)=>{document.querySelector(":root").style.setProperty('--jvc-'+n,v)};
+JVC.setTabSize=(l=4)=>{JVC.setProperty('tab-size',l)};
+JVC.setTabWidth=(w='33.6px')=>{JVC.setProperty('tab-width',w+'px')};
+JVC.setLineHeight=(h='18px')=>{JVC.setProperty('line-height',Math.ceil(h/2)*2+'px')};
+JVC.setFontSize=(s='14px')=>{JVC.setProperty('font-size',s)};
+JVC.setFontFamily=(n=JVC.defFontFamily)=>{JVC.setProperty('font-family',n)};
+JVC.setStyle=(n)=>{
+	var u=n,h=document.querySelector('head'),o=document.querySelectorAll('.jvc-style');if(!n&&o.length)return;
+	o.forEach((e)=>{e.classList.remove('jvc-style');e.classList.add('jvc-style-old')});
+	var delOld=()=>{document.querySelectorAll('.jvc-style-old').forEach((e)=>{e.remove()})};
+	var setStyle=(d='')=>{var s=document.createElement('style');s.className='jvc-style';s.append(d);h.append(s);delOld()}
+	if(n=='no-style')return setStyle();if(n=='jvc-default')return setStyle(JVC.defStyle);
+	if(!JVC.__isUrl(u))u='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/'+n+'.min.css';
+	var l=document.createElement('link');l.setAttribute('rel','stylesheet');l.className='jvc-style';
+	l.onload=delOld;l.setAttribute('href',u);h.append(l)};
+
+/* GETTERS */
+JVC.getJSON=(doc)=>{
+	var dom=JVC.__nodeData(doc,'dom');
+	if(!dom){console.error('JVC.getJSON','No JVC element');return false}
+	return JVC.__getText(dom)};
+
+/* JVC */
+JVC.__isEventExists=(d,e)=>{var evs=$._data(d,'events');return evs&&(e in evs)};
+JVC.__isUrl=(s)=>{try{let url=new URL(s);return url.protocol==="http:"||url.protocol==="https:"}catch(_){return false}};
+JVC.__objDiff=(d,o)=>{var r={};for(const[k,v]of Object.entries(d))if((k in o)&&v!==o[k])r[k]=o[k];return r};
+JVC.__objFix=(obj)=>{var t=typeof obj;if(t==='function'||t==='undefined')return obj+'';
+	if(t==='object'){for(var k in obj)if(obj.hasOwnProperty(k))obj[k]=JVC.__objFix(obj[k])}return obj}
+JVC.__nodeData=(d,n,v=null)=>{if(!('__jvc'in d))d.__jvc={};if(v===null)return d.__jvc[n];d.__jvc[n]=v;return v};
+JVC.__getText=(dom)=>{
+	dom.property.hidden=dom.colon.hidden=true;var text=dom.root.innerText;
+	dom.property.hidden=dom.colon.hidden=false;return text};
+JVC.__tabObserver=()=>{
+	var tab=document.querySelector('.jvc-tab-observer'),c=10;if(tab)return;
+	tab=document.createElement('span');tab.classList.add('jvc','jvc-tab-observer');tab.append("\t".repeat(c));
+	document.querySelector('body').append(tab);
+	var onResize=()=>{var w=tab.offsetWidth/c,h=tab.offsetHeight;if(w+h!=0){JVC.setTabWidth(w);JVC.setLineHeight(h)}}
+	const resizeObserver=new ResizeObserver((entries)=>{entries.forEach(onResize)});
+	resizeObserver.observe(tab);return onResize()};
+
+JVC.nSpan=	document.createElement('span');
+JVC.nRoot=	JVC.nSpan.cloneNode();		JVC.nRoot.className='jvc-root';
+JVC.nItem=	JVC.nSpan.cloneNode();		JVC.nItem.className='jvc-item';
+JVC.nSpace=	JVC.nSpan.cloneNode();		JVC.nSpace.className='jvc-space';	JVC.nSpace.innerText=' ';
+JVC.nTabs=	JVC.nSpace.cloneNode();		JVC.nTabs.classList.add('jvc-tabs');
+JVC.nQuote=	JVC.nSpan.cloneNode();		JVC.nQuote.className='jvc-quote';	JVC.nQuote.innerText='"';
+JVC.nProperty=	JVC.nSpan.cloneNode();		JVC.nProperty.className='hljs-attr';
+JVC.nPunct=	JVC.nSpan.cloneNode();		JVC.nPunct.className='hljs-punctuation';
+JVC.nValue=	JVC.nSpan.cloneNode();		JVC.nValue.className='jvc-value';
+JVC.nComma=	JVC.nPunct.cloneNode();		JVC.nComma.classList.add('jvc-comma');	JVC.nComma.innerHTML=',';
+JVC.nComment=	JVC.nSpan.cloneNode();		JVC.nComment.className='hljs-comment';
+JVC.nList=	JVC.nSpan.cloneNode();		JVC.nList.className='jvc-list';
+JVC.nPrefix=	JVC.nSpan.cloneNode();		JVC.nPrefix.className='jvc-prefix';
+JVC.nSuffix=	JVC.nSpan.cloneNode();		JVC.nSuffix.className='jvc-suffix';
+JVC.nLink=	document.createElement('a');						JVC.nLink.setAttribute('target','_blank');
+JVC.nLogs=	JVC.nSpan.cloneNode();		JVC.nLogs.classList.add('hljs-comment','jvc-logs');
 
 (function($){
-	//
-	function domFixNL(dom,options,cb=null){dom.$list.hide();setTimeout(()=>{dom.$list.show();if(cb)cb(dom,options)},0);return false}// chrome display:inline nl bug
-	function domPunctuation(){return $('<span class=hljs-punctuation>')}
-	function domSpace(s=''){return $('<span class=jvc-space>').append(s)}
-	function domComment(){return $('<span class=hljs-comment>')}
-	function domQuote(){return $('<span class=jvc-quote>"</span>')}
-	function domList(){return $('<span class=jvc-list>')}
-	function domBR(){return domSpace("\n").addClass('jvc-br')}
-	function domNew(key,level,options){
-		var dom={};
-		dom.$root=		$('<span class=jvc-item>').addClass('jvc-level-'+level).data('dom',dom).data('level',level);
-		dom.$property=		$('<span class=hljs-attr>');		// property name
-		var $colon=		'';					// colon: ": "
-		dom.$value=		$('<span class=jvc-value>');		// value: string, numeric, bool, null, callback, etc.
-		dom.$braceStart=	domPunctuation()			// start brace: "[", "{"
-		dom.$placeholder=	domComment();				// comment: "/* .. */"
-		dom.$list=		domList();				// elements of: array, dict, etc.
-		dom.$braceEnd=		dom.$braceStart.clone();		// end brace: "]", "}"
+	function obj2dom(key,val,level,options){
+		var dom={"level":level,_list:null};
+		dom.root=	JVC.nItem.cloneNode();
+		var tabs=	JVC.nTabs.cloneNode();		// tabs: "\t"
+		dom.property=	JVC.nProperty.cloneNode();	// property name
+		dom.colon=	JVC.nPunct.cloneNode();		// colon: ": "
+		dom.value=	JVC.nValue.cloneNode();		// value: string, numeric, bool, null, callback, etc.
+		dom.braceStart=	JVC.nPunct.cloneNode();		// start brace: "[", "{"
+		var comma=	JVC.nComma.cloneNode(true);	// comma: ","
+		dom.pholder=	JVC.nComment.cloneNode();	// comment: "/* .. */"
+		dom.braceEnd=	JVC.nPunct.cloneNode();		// end brace: "]", "}"
+		dom.list=	JVC.nList.cloneNode();		// elements of: array, dict, etc.
+		var prefix=	JVC.nPrefix.cloneNode();
+		var suffix=	JVC.nSuffix.cloneNode();
 		//
-		var $br=domBR();
-		var $tabs=domSpace().addClass('jvc-tabs');
-		if(options.tab&&level)$tabs.append(options.tab.repeat(level));
-		var $comma=domPunctuation().addClass('jvc-comma').append(',');
-		//
+		JVC.__nodeData(dom.root,'dom',dom);
+		if(level)tabs.append("\t".repeat(level));
 		if(typeof key!=='undefined'){
-			dom.$property.append(JVC.htmlEscape(JSON.stringify(key).slice(1,-1)));
-			$colon=domPunctuation();
-			if(level){dom.$property.prepend(domQuote).append(domQuote);$colon.append(':',domSpace(' '))}
-			else $colon.append(domSpace(' '),'=',domSpace(' '));
-			if(key==='jvc-fail')dom.$value.addClass('jvc-fail')}
+			if(level)dom.property.append(JVC.nQuote.cloneNode(true));
+			dom.property.append(JSON.stringify(key).slice(1,-1));
+			if(level){dom.property.append(JVC.nQuote.cloneNode(true));dom.colon.append(':',JVC.nSpace.cloneNode(true))}
+			else dom.colon.append(JVC.nSpace.cloneNode(true),'=',JVC.nSpace.cloneNode(true));
+			if(key==='jvc-fail')dom.value.classList.add('jvc-fail')}
 		//
-		dom.$root.append(
-			$tabs,dom.$property,$colon,dom.$value,dom.$braceStart,$comma,dom.$placeholder,$br,dom.$list,
-			$('<span class=jvc-suffix>').append($tabs.clone(),dom.$braceEnd,$comma.clone(),$br.clone()));
-		return dom}
+		prefix.append(tabs,dom.property,dom.colon,dom.value,dom.braceStart,comma,dom.pholder);
+		suffix.append(tabs.cloneNode(true),dom.braceEnd,comma.cloneNode(true));
+		dom.root.append(prefix,dom.list,suffix);
+		return domSet(dom,val,level,options)}
 	//
-	function domReplace(d,r,k){k='$'+k;d[k].replaceWith(r[k]);d[k]=r[k];return d}
-	function domSetValue(dom,val,type){dom.$value.addClass('hljs-'+type).append(val);return dom}
-	function domSetBraces(dom,start,end=false){dom.$braceStart.append(start);if(end!==false)dom.$braceEnd.append(end);return dom}
-	function domSetPlaceholder(dom,val,options){
-		if(options.commentSelect)val='/* '+val+' */';
-		dom.$placeholder.append(' '+val+' ');return dom}
+	function domReplaceWith(d,r,k){k=k;d[k].replaceWith(r[k]);d[k]=r[k];return d}
+	function domSetValue(dom,val,type){dom.value.classList.add('hljs-'+type);dom.value.append(val);return dom}
+	function domSetLink(dom,val,type){var link=JVC.nLink.cloneNode(true);link.setAttribute('href',val);link.innerText=val;
+		dom.value.classList.add('hljs-'+type);dom.value.append('"',link,'"');return dom}
+	function domSetBraces(dom,start,end=false){dom.braceStart.append(start);if(end!==false)dom.braceEnd.append(end);return dom}
+	function domSetPlaceholder(dom,val,options){dom.pholder.setAttribute('data-pholder',' '+val+' ');return dom}
+	//
 	function domSetArr(dom,val,level,options){
 		var count=val.length;
+		var collapsed=(options.collapsed&&(typeof options.collapsed!=='number'||options.collapsed<=level));
 		if(!count){domSetBraces(dom,'[]');return dom}
-		dom.$root.addClass('jvc-toggle');
-		if(options.collapsed&&(typeof options.collapsed!=='number'||options.collapsed<=level))dom.$root.addClass('jvc-collapsed');
+		dom.root.classList.add('jvc-toggle');
+		if(collapsed)dom.root.classList.add('jvc-collapsed');
 		domSetBraces(dom,'[',']');
 		domSetPlaceholder(dom,count+(count>1?' items':' item'),options);
-		for(var i=0;i<count;++i){
-			var item=obj2dom(undefined,val[i],level+1,options);
-			dom.$list.append(item.$root)}
+		dom._list=[];for(var i=0;i<count;++i)
+			dom._list.push(obj2dom(undefined,val[i],level+1,options).root);
+		if(!collapsed)dom.list.append.apply(dom.list,dom._list);
 		return dom}
 	function domSetObj(dom,val,level,options){
 		var count=Object.keys(val).length;
+		var collapsed=(options.collapsed&&(typeof options.collapsed!=='number'||options.collapsed<=level));
 		if(!count){domSetBraces(dom,'{}');return dom}
-		dom.$root.addClass('jvc-toggle');
-		if(options.collapsed&&(typeof options.collapsed!=='number'||options.collapsed<=level))dom.$root.addClass('jvc-collapsed');
+		dom.root.classList.add('jvc-toggle');
+		if(collapsed)dom.root.classList.add('jvc-collapsed');
 		domSetBraces(dom,'{','}');
+		if(('jvc-cb'in val)){
+			dom.root.classList.add('jvc-collapsed', 'jvc-callback');dom.jvcCb=val['jvc-cb'];
+			return domSetPlaceholder(dom,'jvc-cb: '+JSON.stringify(val['jvc-cb']),options)}
 		domSetPlaceholder(dom,count+(count>1?' items':' item'),options);
-		for(var key in val){
-			if(Object.prototype.hasOwnProperty.call(val,key)){
-				var item=obj2dom(key,val[key],level+1,options)}
-			else{	if(options.error)options.error('domSetObj','JSON-VAL-FAIL-KEY',val+"",key+"");
-				var item=domNew(key.toString(),level+1,options);
-				domSetValue(item,'JSON-VAL-FAIL-KEY: '+(typeof val)+' "'+key.toString()+'"','string').addClass('jvc-fail')}
-			dom.$list.append(item.$root)}
+		dom._list=[];for(var key in val){if(Object.prototype.hasOwnProperty.call(val,key))
+			dom._list.push(obj2dom(key,val[key],level+1,options).root)}
+		if(!collapsed)dom.list.append.apply(dom.list,dom._list);
 		return dom}
 	//
-	function domSetFunc(dom,val,level,options){ /* DEV */
-		dom.$root.addClass('jvc-toggle jvc-collapsed jvc-function');
-		var _val=(val+"").match(/^\s*([^{]+){(.*)}$/);
-		domSetValue(dom,_val[1].replaceAll(/(^\s+|\s+$)/g,''),'title')
-		domSetBraces(dom,'{','}')
-		domSetPlaceholder(dom,'hidden',options);
-		var item=obj2dom("content",_val[2],level+1,options);
-		if(options.debug)options.debug('domSetFunc',val,item);
-		dom.$list.append(item);
-		return dom}
-	//
-	function domSetCb(dom,val,level,options){
-		dom.$root.addClass('jvc-toggle jvc-collapsed jvc-callback jvc-no-obj').data('jvc-cb',val['jvc-cb']);
-		domSetValue(dom,null+'','keyword');
-		domSetPlaceholder(dom,'jvc-cb: '+JSON.stringify(val['jvc-cb']),options);
-		return dom}
 	function domSet(dom,val,level,options){
-		if(typeof val==='string'){
-			var _val=JVC.htmlEscape(JSON.stringify(val).slice(1,-1));
-			if(options.withLinks&&JVC.isUrl(val))
-				_val=$('<a target=_blank>').attr('href',val).append(_val).prop('outerHTML');
-			return domSetValue(dom,'"'+_val+'"','string')}
+		if(typeof val==='string'){var _val=JSON.stringify(val);
+			if(options.withLinks&&JVC.__isUrl(val))
+				return domSetLink(dom,_val.slice(1,-1),'string');
+			return domSetValue(dom,_val,'string')}
 		if(val===null||typeof val==='boolean')
-			return domSetValue(dom,JSON.stringify(val),'keyword');
-		if(typeof val==='undefined')
-			return domSetValue(dom,'undefined','keyword');
+			return domSetValue(dom,val+'','keyword');
 		if(typeof val==='number'||typeof val==='bigint')
 			return domSetValue(dom,val,'number');
-		//
 		if(val instanceof Array)
 			return domSetArr(dom,val,level,options);
 		if(typeof val==='object'&&options.bigNumbers&&(typeof val.toExponential==='function'||val.isLosslessNumber))
-			return domSetValue(dom,val.toString(),'number')
-		if(typeof val==='object'&&'jvc-cb'in val)
-			return domSetCb(dom,val,level,options);
+			return domSetValue(dom,val.toString(),'number');
 		if(typeof val==='object')
 			return domSetObj(dom,val,level,options);
-		if(typeof val==='function')
-			return domSetFunc(dom,val,level,options);
 		//
-		if(options.error)options.error('domSet','JSON-VAL-FAIL-TYPE:',typeof val,val);
-		return domSetValue(dom,'JSON-VAL-FAIL-TYPE: '+(typeof val)+' "'+val.toString()+'"','string').addClass('jvc-fail')
+		return domSetValue(dom,val+'','string');
 	}
 	//
-	function obj2dom(key,val,level,options){
-		var dom=domNew(key,level,options);
-		return domSet(dom,val,level,options)}
-	//
-	function objCb(dom,val,level,options){
+	function objCallback(dom,val,level,options){
+		options.debug('JVC:callback',val);
+		val=JVC.__objFix(val);
 		var _dom=obj2dom(undefined,val,level,options);
-		if(options.debug)options.debug('objCb',val,level,_dom,options);
-		if(!_dom.$root.hasClass('jvc-toggle'))dom.$root.addClass('jvc-collapsed');
-		else dom.$root.removeClass('jvc-collapsed');
-		domReplace(dom,_dom,'value');
-		domReplace(dom,_dom,'braceStart');
-		domReplace(dom,_dom,'braceEnd');
-		if(dom.$braceEnd.is(':empty'))dom.$root.addClass('jvc-no-obj');
-		else dom.$root.removeClass('jvc-no-obj');
-		domReplace(dom,_dom,'list');
-		dom.$root.removeClass('jvc-loading');
-		return domFixNL(dom,options,docChange)}
+		dom._list=_dom._list;
+		domReplaceWith(dom,_dom,'value');
+		domReplaceWith(dom,_dom,'braceStart');
+		domReplaceWith(dom,_dom,'braceEnd');
+		domReplaceWith(dom,_dom,'list');
+		dom.root.classList.remove('jvc-loading');
+		if(domIsToggle(_dom))return domExpand(dom,options);
+		else dom.root.classList.add('jvc-no-obj');
+		return domCollapse(dom,options)
+	}
+	//
+	function domExpand(dom,options){
+		if(dom._list!==null)dom.list.append.apply(dom.list,dom._list);
+		dom.root.classList.remove('jvc-collapsed');return docChange(dom,options)}
+	function domCollapse(dom,options){
+		if(!typeof dom.jvcCb==='undefined'){
+			if(!dom.braceEnd.childNodes.length)dom.root.classList.add('jvc-no-obj');
+			else dom.root.classList.remove('jvc-no-obj')}
+		dom.root.classList.add('jvc-collapsed');dom.list.innerHTML='';return docChange(dom,options)}
+	function domIsCollapsed(dom){return dom.root.classList.contains('jvc-collapsed')}
+	function domIsToggle(dom){return dom.root.classList.contains('jvc-toggle')}
+	function domToggle(dom,options){if(domIsCollapsed(dom))return domExpand(dom,options);return domCollapse(dom,options)}
 	//
 	function docChange(dom,options){
-		if(!options.onChange&&!options.showJSON)return false;
-		setTimeout(function(){
-			/*DEV*/
-			var $doc=dom.$root.closest('.jvc');
-			var $dom=dom.$root.closest('.jvc-root-list').clone().addClass('jvc-tabs').appendTo($doc);
-			$dom.find(':hidden,.hljs-comment').remove();
-			json=$dom.text();$dom.remove();
-			/*DEV*/
-			if(options.showJSON)$doc.find('.jvc-log.jvc-json').empty()
-				.append("// Logs:\n")
-				.append(JVC.htmlEscape(json));
-			if(typeof options.onChange==='function')options.onChange(dom.$root[0],json);
-			$doc.trigger('change',[dom.$root[0],json]);
-		},0);return false}
+		var doc=dom.root.closest('.jvc');
+		var isTrig=JVC.__isEventExists(doc,'JVC:change');
+		if(!options.showJSON&&!isTrig)return dom;
+		if(options.showJSON){
+			var log=doc.querySelector('.jvc-logs.jvc-json');log.innerHTML='';
+			log.append("// JSON:\n"+JVC.getJSON(doc))}
+		if(isTrig)$(doc).trigger('JVC:change',[doc]);
+		return dom}
 	//
 	$.fn.JVC=function(obj,conf){
-		var options=Object.assign({},JVC.defs,conf);
-		if(options.debug)options.debug('JVC',{'obj':obj,'options':options});
-		if(!$('.jvc-style').length)JVC.setStyle('jvc-default');
-		return this.each(function(){
-			var $doc=$('<div class="jvc hljs">').appendTo($(this).empty()).data('options',options);
-			if(!options.withQuotes)$doc.addClass('jvc-no-quotes');
-			if(options.invertColors)$doc.addClass('jvc-invert');
-			if(!options.commentSelect)$doc.addClass('jvc-comment-no-select');
-			if(options.showConf)
-				$doc.prepend($('<span class=jvc-log jvc-conf>')
-				.append('// Conf: '+JSON.stringify(JVC.objDiff(JVC.defs,conf))))
+		JVC.setStyle();JVC.__tabObserver();
+		//
+		var options=Object.assign({},JVC.defOptions,conf);
+		options.debug('JVC',{'obj':obj,'options':options});
+		obj=JVC.__objFix(obj);
+		return this.each(function(){var doc=this;
+			doc.innerHTML='';doc.classList.add('jvc', 'hljs');
+			if(options.invertColors)doc.classList.add('jvc-invert');
+			if(!options.withQuotes)doc.classList.add('jvc-no-quotes');
+			if(options.showConf){var logs=JVC.nLogs.cloneNode();logs.classList.add('jvc-conf');
+				logs.append('// Conf: '+JSON.stringify(JVC.__objDiff(JVC.defOptions,conf)));doc.prepend(logs)}
 			var dom=obj2dom(options.key,obj,0,options);
-			$doc.append(domList().addClass('jvc-root-list').append(dom.$root));
+			var root=JVC.nRoot.cloneNode();root.append(dom.root);
+			doc.append(root);
+			if(options.showJSON){var logs=JVC.nLogs.cloneNode();logs.classList.add('jvc-json');doc.append(logs)}
+			JVC.__nodeData(doc,'conf',options);
+			JVC.__nodeData(doc,'dom',dom);
 			docChange(dom,options);
-			if(options.showJSON)$doc.append($('<span class="jvc-log jvc-json">'));
 			//
-			$doc.off('click').on('click','.jvc-toggle>:not(.jvc-list)',function(){
-				var dom=$(this).closest('.jvc-toggle').data('dom');
-				var data=dom.$root.data('jvc-cb');
-				if(typeof data==='undefined'||data===false){
-					dom.$root.toggleClass('jvc-collapsed');
-					return domFixNL(dom,options,docChange)}
+			$(doc).off('click').on('click','.jvc-toggle>:not(.jvc-list)',function(){
+				var dom=JVC.__nodeData(this.closest('.jvc-toggle'),'dom');
+				console.log(this.closest('.jvc-toggle'),dom)
+				if(typeof dom.jvcCb==='undefined')return domToggle(dom,options);
+				if(!domIsCollapsed(dom))return domCollapse(dom,options);
 				//
-				if(!dom.$root.hasClass('jvc-collapsed')){
-					dom.$root.addClass('jvc-collapsed');
-					if(dom.$braceEnd.is(':empty'))dom.$root.addClass('jvc-no-obj');
-					else dom.$root.removeClass('jvc-no-obj');
-					return domFixNL(dom,options,docChange)}
-				//
-				var level=dom.$root.data('level');
-				if(!options.callback){
-					if(options.error)options.error('JVC','OPTIONS-CALLBACK-EMPTY:',options.callback);
-					dom.$list.append(obj2dom("JVC-fail","Not set options.callback",level,options).$root);
+				var level=dom.level;
+				if(!JVC.__isEventExists(doc,'JVC:callback')){
+					options.error('JVC','Not set "JVC:callback" trigger');
+					dom.list.append(obj2dom("jvc-fail",'Not set "JVC:callback" trigger',level,options).root);
 					return docChange(dom,options)}
 				//
-				dom.$root.addClass('jvc-loading');
-				options.callback(data,function(val){objCb(dom,val,level,options)});
-				return docChange(dom,options)
+				dom.root.classList.add('jvc-loading');
+				$(doc).trigger('JVC:callback',[dom.root,dom.jvcCb,function(val){objCallback(dom,val,level,options)}]);
+				return false;
 			})
 		})
 	}
