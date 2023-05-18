@@ -7,7 +7,7 @@
 	--jvc-font-family:"Source Code Pro",monospace;
 }
 
-@font-face{font-family:'Source Code Pro';
+@font-face{font-family:'Source Code Pro';font-display:block;
 	src:url(https://fonts.gstatic.com/s/sourcecodepro/v22/HI_diYsKILxRpg3hIP6sJ7fM7PqPMcMnZFqUwX28DMyQtMlrTA.woff2) format('woff2')}
 
 /* jvc */
@@ -59,8 +59,7 @@
 .jvc-suffix>.jvc-tabs{display:none}
 .jvc-toggle>.jvc-suffix>.jvc-tabs{display:inline-block}
 .jvc-collapsed>.jvc-suffix>.jvc-tabs{display:none}
-/*DEV*/.jvc-tab-observer{position:fixed;z-index:-1;user-select:none;line-height:normal;
-	font-family:var(--jvc-font-family-load)}
+.jvc-tab-observer{position:fixed;z-index:-1;user-select:none;line-height:normal;visibility:hidden;font-family:var(--jvc-font-family)}
 
 /* comma */
 .jvc-suffix>.jvc-comma,
