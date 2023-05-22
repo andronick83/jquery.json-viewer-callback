@@ -1,7 +1,6 @@
 # jquery.json-viewer-callback
 
 ![github](https://img.shields.io/github/license/andronick83/jquery.json-viewer-callback)
-![GitHub all releases](https://img.shields.io/github/downloads/andronick83/jquery.json-viewer-callback/total)
 
 jQuery JSON Viewer With Callback Support (**JVC**)
 
