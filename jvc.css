@@ -34,18 +34,18 @@
 
 /* item */
 .jvc-item{display:block}
-
-.jvc-toggle::before{display:inline-block;width:var(--jvc-line-height);height:var(--jvc-line-height);text-align:center;
-	margin-left:calc(-1*var(--jvc-line-height));color:#7f7f7f40;content:"\25BC";transition:transform 0.2s}
-.jvc-collapsed::before{transform:rotate(-90deg)}
-.jvc-callback::before{content:"\21BB"}
-.jvc-callback.jvc-collapsed::before{transform:rotate(-360deg)}
-.jvc-loading::before{animation:rotation 1s infinite linear}
-@keyframes rotation{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.jvc-toggle:hover::before{color:#7f7f7f80}
 .jvc-toggle>.jvc-prefix,
 .jvc-toggle>.jvc-suffix{cursor:pointer}
-.jvc-toggle:hover:not(:has(>.jvc-list:hover))::before{color:#7f7f7f}
+.jvc-prefix{scroll-margin-left:var(--jvc-tab-width)}
+.jvc-toggle>.jvc-prefix::before{display:inline-block;width:var(--jvc-line-height);height:var(--jvc-line-height);text-align:center;
+	margin-left:calc(-1*var(--jvc-line-height));color:#7f7f7f40;content:"\25BC";transition:transform 0.2s;cursor:pointer}
+.jvc-collapsed>.jvc-prefix::before{transform:rotate(-90deg)}
+.jvc-callback>.jvc-prefix::before{content:"\21BB"}
+.jvc-callback.jvc-collapsed>.jvc-prefix::before{transform:rotate(-360deg)}
+.jvc-loading>.jvc-prefix::before{animation:rotation 1s infinite linear}
+@keyframes rotation{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.jvc-toggle:hover>.jvc-prefix::before{color:#7f7f7f80}
+.jvc-toggle:hover:not(:has(>.jvc-list:hover))>.jvc-prefix::before{color:#7f7f7f}
 
 /* comment */
 .hljs-comment::after{content:attr(data-pholder)}
