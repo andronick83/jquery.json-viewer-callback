@@ -19,19 +19,23 @@ Example:
 
 <script>
 $(function($){
-
-	if(0){	// JVC Setters: 
-		JVC.setTabSize(2);		// Tab-Size (spaces)
-		JVC.setFontSize('12px');	// Font-Size
-		JVC.setFontFamily('monospace'); // Font-Family
-		JVC.setStyle('night-owl');	// no-style, jvc-default, night-owl, etc. https://cdnjs.com/libraries/highlight.js
-		
-		// JVC Getters:
-		var text=JVC.getJSON($('#JVC1').get(0));
-		
-		// JVC Triggers:
-		$('#JVC1').on('JVC:callback',function(element,jvc_data,callback){callback([1,2,3])});
-		$('#JVC1').on('JVC:change',function(doc){console.log(JVC.getJSON(doc))})	}
+	/*
+	// JVC Setters: 
+	JVC.setTabSize(4);			// Tab-Size (spaces)
+	JVC.setTabWidth(33.6);			// Tab-Width (pixels)
+	JVC.setLineHeight(18);			// Line-Height (pixels)
+	JVC.setFontSize(14);			// Font-Size (pixels)
+	JVC.setFontFamily('monospace');		// Font-Family (string)
+	JVC.setStyle('night-owl');		// Highlight-Style (string): no-style, jvc-default, night-owl, etc.
+						//	https://cdnjs.com/libraries/highlight.js
+	
+	// JVC Getters:
+	var json = JVC.getJSON($('#JVC1').get(0));// Get JSON (string)
+	
+	// JVC Triggers:
+	$('#JVC1').on('JVC:callback', function(element, jvc_data, callback){callback([1, 2, 3])});
+	$('#JVC1').on('JVC:change', function(doc){console.log("JVC:change",doc,JVC.getJSON(doc))});
+	*/
 	
 	// JVC JSON-Object:
 	json1 = {
