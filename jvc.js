@@ -1,8 +1,10 @@
 /**
- * jQuery json-viewer-callback (JVC.js)
+ * jQuery json-viewer-callback (JVC)
  * @author: andronick83 <andronick.mail@gmail.com>
  * @link: https://github.com/andronick83/jquery.json-viewer-callback
  */
+
+"use strict";
 
 var JVC={};
 
@@ -19,12 +21,13 @@ JVC.defStyle=`
 .hljs-attr{color:#678cb1}
 .hljs-comment{color:#818e96;font-style:italic}`;
 
+
 /* SETTERS */
 JVC.setProperty=(n,v)=>{document.querySelector(":root").style.setProperty('--jvc-'+n,v)};
 JVC.setTabSize=(l=4)=>{JVC.setProperty('tab-size',l)};
-JVC.setTabWidth=(w='33.6px')=>{JVC.setProperty('tab-width',w+'px')};
-JVC.setLineHeight=(h='18px')=>{JVC.setProperty('line-height',Math.ceil(h/2)*2+'px')};
-JVC.setFontSize=(s='14px')=>{JVC.setProperty('font-size',s)};
+JVC.setTabWidth=(w=33.6)=>{JVC.setProperty('tab-width',w+'px')};
+JVC.setLineHeight=(h=18)=>{JVC.setProperty('line-height',Math.ceil(h/2)*2+'px')};
+JVC.setFontSize=(s=14)=>{JVC.setProperty('font-size',s+'px')};
 JVC.setFontFamily=(n=JVC.defFontFamily)=>{JVC.setProperty('font-family',n)};
 JVC.setStyle=(n)=>{
 	var u=n,h=document.querySelector('head'),o=document.querySelectorAll('.jvc-style');if(!n&&o.length)return;
