@@ -4,7 +4,7 @@
 
 jQuery JSON Viewer With Callback Support (**JVC**)
 
-![Screenshot](screenshot.png?)
+![Screenshot](demo-screenshot.png?)
 
 <hr>
 
@@ -17,13 +17,13 @@ jQuery JSON Viewer With Callback Support (**JVC**)
 - Add to \<head\>:
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-<link rel=stylesheet href="/jvc.css"/>
-<script src="/jvc.js"></script>
+<link rel=stylesheet href="jvc.css"/>
+<script src="jvc.min.js"></script>
 ```
 
 - Add to \<body\>:
 ```html
-<div id="jvc-viever"></div>
+<div id=jvc></div>
 ```
 
 - Simple Object:
@@ -37,35 +37,33 @@ var json = {
 	"url": "http://example.com/",
 	"array": [0, 0.1, 2, [], {}],
 	"callback": {
-		"jvc-cb": "https://cdn.jsdelivr.net/gh/herrstrietzel/fonthelpers@main/json/gfontsAPI.json"
+		"§Callback": "https://cdn.jsdelivr.net/gh/herrstrietzel/fonthelpers@main/json/gfontsAPI.json"
 	}
 }
 ```
 
-- JVC Configuration: (key,invertColors,withLinks,bigNumbers,withQuotes,withFunctions,collapsed,showConf,showJSON,debug,error)
+- JVC Calback Event:
 ```JavaScript
-var conf = {collapsed: false};
+let jvcCb = function(ev){
+	// Get JVC and Data:
+	let jvc = ev.JVC, data = ev.data;
+	// Ajax request:
+	$.ajax({url:data, dataType:"json"})
+	.done(v=>jvc(v))
+	.fail((xhr, status, err)=>{
+		jvc(Error("jvc-"+status+' '+(err? err :xhr.status)));
+	});
+};
+```
+
+- JVC Configuration: (expand, showMenu, showQuotes, showCommas, showJSON, showConsole, logger, change, callback, keyPrefix, keyLoop, keyCallback, keysArrGroup, keysNonEnum, keysSymbols, keysProto)
+```JavaScript
+var conf = {showJSON: true, showConsole: true, callback: jvcCb};
 ```
 
 - JVC Print Viever:
 ```JavaScript
-var jvc = $('#jvc-viever').JVC(json, conf);
-```
-
-- JVC Calback Events:
-```JavaScript
-jvc.on('JVC:change', function(element){
-	var json = JVC.getJSON(element);
-	console.log("JVC:change", json, JSON.parse(json));
-});
-
-jvc.on('JVC:callback', function(event, element, data, callback){
-	$.ajax({url:data, dataType:"json"})
-	.done(callback)
-	.fail(function(xhr, status, err){
-		callback({"jvc-fail": status+' ('+(err? err :xhr.status)+')'})
-	})
-});
+$('#jvc').JVC(json, conf);
 ```
 
 <hr>
