@@ -4,7 +4,7 @@
 
 jQuery JSON Viewer With Callback Support (**JVC**)
 
-![Screenshot](demo-screenshot.png?)
+![Screenshot](demo-screenshot-v2.png?)
 
 <hr>
 
@@ -28,7 +28,7 @@ jQuery JSON Viewer With Callback Support (**JVC**)
 
 - Simple Object:
 ```JavaScript
-var json = {
+let json = {
 	"null": null,
 	"true": true,
 	"false": false,
@@ -58,7 +58,7 @@ let jvcCb = function(ev){
 
 - JVC Configuration: (expand, showMenu, showQuotes, showCommas, showJSON, showConsole, logger, change, callback, keyPrefix, keyLoop, keyCallback, keysArrGroup, keysNonEnum, keysSymbols, keysProto)
 ```JavaScript
-var conf = {showJSON: true, showConsole: true, callback: jvcCb};
+let conf = {showJSON: true, showConsole: true, callback: jvcCb};
 ```
 
 - JVC Print Viever:
