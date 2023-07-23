@@ -1,4 +1,4 @@
-# jquery.json-viewer-callback
+# jquery.json-viewer-callback v2
 
 ![github](https://img.shields.io/github/license/andronick83/jquery.json-viewer-callback)
 
