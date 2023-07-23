@@ -99,7 +99,8 @@ let jvcCb = function(ev){
 	     if(data == '/slow') return setTimeout(jvc, 3*1000, 'json-slow');
 	else if(data == '/node') return jvc($('#jvc').get(0));
 	else{ // Ajax Obj:
-		if(data == '/long') data="https://cdn.jsdelivr.net/gh/herrstrietzel/fonthelpers@main/json/gfontsAPI.json";
+		if(data == '/ajax') data="/ajax.json";
+		else if(data == '/long') data="https://cdn.jsdelivr.net/gh/herrstrietzel/fonthelpers@main/json/gfontsAPI.json";
 		$.ajax(data).done(v=>jvc(v))
 		.fail((xhr, status, err)=>{
 			jvc(Error("jvc-"+status+' '+(err? err :xhr.status)));
