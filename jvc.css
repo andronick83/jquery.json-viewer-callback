@@ -118,7 +118,9 @@
 .jvc-no-commas .jvc-comma{display:inline-block;width:0.1px;height:0.1px;overflow:hidden}
 
 /* console */
-.jvc-console{outline:none;padding-left:var(--jvc-tab-width);user-select:none;margin:8px 0 2px 0;white-space:pre-wrap}
-.jvc-console::before{display:inline-block;color:#818e9680;content:'>';margin-left:calc(-1 * var(--jvc-char-width))}
-.jvc-console::after{color:#818e96}.jvc-console:empty::after{content:attr(pholder)}
-.jvc-console:empty:focus::after{content:''}.jvc-console:focus{opacity:1.0}
+.jvc-console{white-space:pre;margin:8px 0 2px 0}
+.jvc-console>div{outline:none;padding-left:var(--jvc-tab-width);user-select:none;white-space:pre-wrap}
+.jvc-console>.jvc-input::before{display:inline-block;color:#818e9680;content:'>';margin-left:calc(-1 * var(--jvc-char-width))}
+.jvc-console>.jvc-input::after{color:#818e96}.jvc-console>.jvc-input:empty::after{content:attr(pholder)}
+.jvc-console>.jvc-input:empty:focus::after{content:''}.jvc-console>.jvc-input:focus{opacity:1.0}
+.jvc-console>.jvc-hist>span{margin-right:calc(var(--jvc-tab-width) / var(--jvc-tab-size));cursor:pointer}
