@@ -4,7 +4,7 @@
 
 jQuery JSON Viewer With Callback Support (**JVC**)
 
-![Screenshot](demo-screenshot-v2.png?)
+![Screenshot](demo-screenshot.png)
 
 <hr>
 
