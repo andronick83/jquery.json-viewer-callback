@@ -210,9 +210,11 @@
 				nApp(s,nNode(nLabel,0,0,[i,n]))});nApp(m,s);nApp(j,m)},
 		jConsCb=($j,n,c)=>{let s=n.innerText||'null';n.blur();
 			try{$j.JVC(W['eval']('('+s+')'));nAttr(n,{pholder:s});nText(n,'')}catch(_){c[_log][_err](_jvc+'console',_);$j.JVC(_)}},
-		jCons=(j,c)=>{let $j=$(j),n=nNode(nDiv,[_hljs+'comment',_jvc+'console'],{contenteditable:true,pholder:'json'});
-			nEv(n,'keydown',e=>{let k=e.keyCode||e.charCode||e.which;
-				if((k==10||k==13)&&!e.shiftKey){ePrev(e);jConsCb($j,n,c)}});nApp(j,n)};
+		jConsCl=(j,e,c)=>{let n=nClsOne(_jvc+'input');nText(n,e.target.innerText);jConsCb($(j),n,c)},
+		jCons=(j,c)=>{let $j=$(j),n=nNode(nDiv,[_hljs+'comment',_jvc+'input'],{contenteditable:true,pholder:'json'});
+			nEv(n,'keydown',e=>{let k=e.keyCode||e.charCode||e.which;if((k==10||k==13)&&!e.shiftKey){ePrev(e);jConsCb($j,n,c)}});
+			let l=[];if(iOf(c[_sCons],A)){aFor(c[_sCons],s=>{let i=nNode(nComm,0,0,s);nEv(i,'click',e=>jConsCl(j,e,c));l.push(i)})}
+			nApp(j,nNode(nDiv,_jvc+'console',0,[n,nNode(nDiv,_jvc+'hist',0,l)]))};
 	// JVC Main
 	jReady(_=>{jStyle();jFontS();jTabS();let c=10,t=nNode('span',['jvc',_jvc+'tab-observer'],0,"\t".repeat(c)),o=new ResizeObserver(_=>{
 		let w=t.offsetWidth/c,h=t.offsetHeight;if(w)jTabW(w);if(h)jLineH(h)});o.observe(t);nApp(DB,t)});
