@@ -73,6 +73,16 @@ $('#jvc').JVC(json, conf);
 
 <hr>
 
+## Requirements:
+- JS ES2015/ES6:
+```
+Chrome	>=51	May 2016
+Firefox	>=52	Mar 2017
+Edge	>=79	Jan 2020
+Safari	>=10	Sep 2016
+Opera	>=38	Jun 2016
+```
+
 ## About
 - Author: [andronick83.mail@gmail.com](mailto:andronick.mail@gmail.com) :shipit:
 - License: [MIT License](http://opensource.org/licenses/MIT) :+1:
