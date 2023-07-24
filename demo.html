@@ -2,7 +2,7 @@
 <html dir="ltr" lang="uk" xml:lang="uk">
 <head>
 
-<title>JVC</title>
+<title>JVC v2</title>
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 <meta name="description" content="jQuery JSON Viewer With Callback Support (JVC) v2.0.0
  * @Link: https://github.com/andronick83/jquery.json-viewer-callback
@@ -12,14 +12,10 @@
 <meta name="theme-color" content="#161616"/>
 <meta name="google" content="notranslate"/>
 
-<!--script src="https://cdn.lr-ingest.com/LogRocket.min.js" crossorigin="anonymous"></script>
-<script>//https://app.logrocket.com/m3pmyl/jquery-json-viewer-callback/
-window.LogRocket && window.LogRocket.init('m3pmyl/jquery-json-viewer-callback');</script-->
-
-<link rel=stylesheet href="/page-jvc.css?v2"/>
-<script src="/page.js?v2" defer></script>
-<script src="/page-logging.js?v2" defer></script>
-<script src="/page-jvc.js?v2" defer></script>
+<link rel=stylesheet href="/page-jvc.css"/>
+<script src="/page.js" defer></script>
+<script src="/page-logging.js" defer></script>
+<script src="/page-jvc.js" defer></script>
 <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.10/webfont.js" defer></script>
 
 
@@ -27,14 +23,14 @@ window.LogRocket && window.LogRocket.init('m3pmyl/jquery-json-viewer-callback');
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" defer></script>
 
-<link rel=stylesheet href="jvc.css?v2"/>
-<script src="jvc.min.js?v2" defer></script>
+<link rel=stylesheet href="jvc.min.css"/>
+<script src="jvc.min.js" defer></script>
 
 </head>
 <body translate=no>
 
 <div class="page jvc-scroll"><div class=content>
-	<span>// JVC with Callback and Ajax-Loader:</span>
+	<span>// JVC with Console and Callback Ajax-loader</span>
 	<div id=jvc></div>
 </div></div>
 
@@ -101,7 +97,7 @@ let jvcCb = function(ev){
 	else{ // Ajax Obj:
 		if(data == '/ajax') data="/ajax.json";
 		else if(data == '/long') data="https://cdn.jsdelivr.net/gh/herrstrietzel/fonthelpers@main/json/gfontsAPI.json";
-		$.ajax(data).done(v=>jvc(v))
+		$.ajax(data).done(jvc)
 		.fail((xhr, status, err)=>{
 			jvc(Error("jvc-"+status+' '+(err? err :xhr.status)));
 		});
@@ -149,7 +145,7 @@ JVC.defConf={
 };
 
 // JVC Getters/Setters: 
-JVC.getJSON($('.jvc'));		// Get JSON String
+JVC.getJSON($('.jvc').get(0));	// Get JSON String
 JVC.setTabSize(4);		// Set Tab-Size Spaces
 JVC.setFontFamily('monospace');	// Set Font-Family String
 JVC.setFontSize(14);		// Set Font-Size Pixels
