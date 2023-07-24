@@ -61,7 +61,7 @@ let jvcCb = function(ev){
 let conf = {showJSON: true, showConsole: true, callback: jvcCb};
 ```
 
-- JVC Print Viever:
+- JVC Show Viewer:
 ```JavaScript
 $('#jvc').JVC(json, conf);
 ```
