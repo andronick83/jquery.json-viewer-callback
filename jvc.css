@@ -122,5 +122,5 @@
 .jvc-console>div{outline:none;padding-left:var(--jvc-tab-width);user-select:none;white-space:pre-wrap}
 .jvc-console>.jvc-input::before{display:inline-block;color:#818e9680;content:'>';margin-left:calc(-1 * var(--jvc-char-width))}
 .jvc-console>.jvc-input::after{color:#818e96}.jvc-console>.jvc-input:empty::after{content:attr(pholder)}
-.jvc-console>.jvc-input:empty:focus::after{content:''}.jvc-console>.jvc-input:focus{opacity:1.0}
-.jvc-console>.jvc-hist>span{margin-right:calc(var(--jvc-tab-width) / var(--jvc-tab-size));cursor:pointer}
+.jvc-console>.jvc-input:empty:focus::after{content:''}.jvc-console>.jvc-input{opacity:1.0}
+.jvc-console>.jvc-hist{margin-top:4px}.jvc-console>.jvc-hist>span{margin-right:calc(var(--jvc-tab-width) / var(--jvc-tab-size));cursor:pointer}
