@@ -108,7 +108,7 @@ let jvcCb = function(ev){
 	}};
 
 // JVC Conf:
-let conf={showJSON: true, showConsole: true, callback: jvcCb};
+let conf={showJSON: true, showConsole: ['json', 'JVC', '$("#jvc")[0]'], callback: jvcCb};
 
 // Sync JVC loader:
 //$('.jvc:eq(0)').JVC(json, conf);
