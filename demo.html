@@ -13,7 +13,8 @@
 <meta name="google" content="notranslate"/>
 
 <script src="https://cdn.lr-ingest.com/LogRocket.min.js" crossorigin="anonymous"></script>
-<script>window.LogRocket&&window.LogRocket.init('m3pmyl/jquery-json-viewer-callback');</script>
+<script>//https://app.logrocket.com/m3pmyl/jquery-json-viewer-callback/
+window.LogRocket && window.LogRocket.init('m3pmyl/jquery-json-viewer-callback');</script>
 
 <link rel=stylesheet href="/page-jvc.css"/>
 <script src="/page.js" defer></script>
@@ -110,7 +111,7 @@ let jvcCb = function(ev){
 let conf={showJSON: true, showConsole: ['json', 'JVC', '$("#jvc")[0]'], callback: jvcCb};
 
 // Sync JVC loader:
-//$('.jvc:eq(0)').JVC(json, conf);
+//$('#jvc').JVC(json, conf);
 
 // Defer/Async JVC loader `<script src="jvc.js" defer>`:
 document.addEventListener('DOMContentLoaded',_=>{
@@ -138,8 +139,8 @@ JVC.defConf={
 	callback:		ƒ e=>(…),
 	//
 	keyPrefix:		'§',
-	keyLoop:		'Loop',
-	keyCallback:		'Callback',
+	keyLoop:		'§Loop',
+	keyCallback:		'§Callback',
 	//
 	keysArrGroup:		true,
 	keysNonEnum:		true,
@@ -148,7 +149,7 @@ JVC.defConf={
 };
 
 // JVC Getters/Setters: 
-JVC.getJSON($('.jvc').get(0));	// Get JSON String
+JVC.getJSON($('#jvc'));		// Get JSON String
 JVC.setTabSize(4);		// Set Tab-Size Spaces
 JVC.setFontFamily('monospace');	// Set Font-Family String
 JVC.setFontSize(14);		// Set Font-Size Pixels
