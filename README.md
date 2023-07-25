@@ -17,7 +17,7 @@ jQuery JSON Viewer With Callback Support (**JVC**)
 - Add to \<head\>:
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-<link rel=stylesheet href="jvc.css"/>
+<link rel=stylesheet href="jvc.min.css"/>
 <script src="jvc.min.js"></script>
 ```
 
@@ -82,6 +82,8 @@ Edge	>=79	Jan 2020
 Safari	>=10	Sep 2016
 Opera	>=38	Jun 2016
 ```
+
+<hr>
 
 ## About
 - Author: [andronick83.mail@gmail.com](mailto:andronick.mail@gmail.com) :shipit:
