@@ -198,7 +198,6 @@
 			[_kPref]:	'§',	[_kLoop]:	'§Loop',[_kCb]:		'§Callback',
 			[_kGroup]:	!0,	[_kNonEn]:	!0,	[_kSym]:	!0,	[_kProto]:	!0},
 	// JVC Root Nodes
-		jOpt=(j,a,c)=>(a?nClsRem(j,_jvc+c):nClsAdd(j,_jvc+c)),
 		jOpts=(j,o,c)=>oFor(o,p=>(c[p]?nClsRem(j,_jvc+'no-'+o[p]):nClsAdd(j,_jvc+'no-'+o[p]))),
 		jLogs=j=>{let n=nNode(nSpan,_jvc+'json');nApp(j,nNode(nLogs,0,0,['// JSON: ',n]));
 			$(n).on('click',function(){let r=D.createRange();r.selectNodeContents(this);
