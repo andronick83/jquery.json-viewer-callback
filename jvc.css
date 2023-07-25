@@ -93,10 +93,10 @@
 .jvc-list-part:last-of-type>.jvc-item:last-of-type>.jvc-line>.jvc-comma{display:none}
 
 /* menu */
-.jvc-menu{display:inline-block;padding:4px 8px;position:absolute;top:0;right:0;cursor:pointer;background-color:inherit;z-index:1;user-select:none;opacity:0.6;border-radius:4px}
+.jvc-menu{display:inline-block;padding:4px 8px;position:absolute;top:0;right:0;cursor:pointer;background-color:inherit;z-index:1;user-select:none;opacity:1.0;border-radius:4px}
 .jvc-menu::before{position:relative;z-index:2;content:'menu \25bc'}
 .jvc-menu:hover::before{content:'\25bc'}
-.jvc-menu-sub{display:none;padding:8px;position:absolute;top:0;right:0;z-index:1;background-color:inherit;border-radius:4px}
+.jvc-menu-sub{display:none;padding:8px;position:absolute;top:0;right:0;z-index:1;background-color:#7f7f7f10;border-radius:4px}
 .jvc-menu:hover .jvc-menu-sub{display:inline-block;opacity:1.0}
 .jvc-menu label{display:block;opacity:0.6;white-space:pre;cursor:pointer}.jvc-menu label:hover{opacity:1.0}
 .jvc-menu input{vertical-align:middle}
@@ -120,7 +120,9 @@
 /* console */
 .jvc-console{white-space:pre;margin:8px 0 2px 0}
 .jvc-console>div{outline:none;padding-left:var(--jvc-tab-width);user-select:none;white-space:pre-wrap}
-.jvc-console>.jvc-input::before{display:inline-block;color:#818e9680;content:'>';margin-left:calc(-1 * var(--jvc-char-width))}
-.jvc-console>.jvc-input::after{color:#818e96}.jvc-console>.jvc-input:empty::after{content:attr(pholder)}
-.jvc-console>.jvc-input:empty:focus::after{content:''}.jvc-console>.jvc-input{opacity:1.0}
-.jvc-console>.jvc-hist{margin-top:4px}.jvc-console>.jvc-hist>span{margin-right:calc(var(--jvc-tab-width) / var(--jvc-tab-size));cursor:pointer}
+.jvc-input::before{display:inline-block;color:#818e9680;content:'>';margin-left:calc(-1 * var(--jvc-char-width))}
+.jvc-input::after{color:#818e96}.jvc-console>.jvc-input:empty::after{content:attr(pholder)}
+.jvc-input:empty:focus::after{content:''}.jvc-console>.jvc-input{opacity:1.0}
+.jvc-hist{margin-top:4px}
+.jvc-hist>span{display:inline-block;padding:4px calc(var(--jvc-tab-width) / var(--jvc-tab-size));border-radius:4px;cursor:pointer}
+.jvc-hist>span:hover{background-color:#7f7f7f10}
