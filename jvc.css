@@ -120,7 +120,8 @@
 .jvc-console{white-space:pre;margin:8px 0 2px 0}
 .jvc-console>div{outline:none;padding-left:var(--jvc-tab-width);user-select:none;white-space:pre-wrap}
 .jvc-input::before{display:inline-block;color:#818e9680;content:'>';margin-left:calc(-1 * var(--jvc-char-width))}
-.jvc-input::after{color:#818e96}.jvc-console>.jvc-input:empty::after{content:attr(pholder)}
+.jvc-input::after{color:#818e96;background-color:rgba(0,0,0,0.2);width:100%;display:inline-block;}
+.jvc-console>.jvc-input:empty::after{content:attr(pholder)}
 .jvc-input:empty:focus::after{content:''}.jvc-console>.jvc-input{opacity:1.0}
 .jvc-hist{margin-top:4px}
 .jvc-hist>span{display:inline-block;padding:4px calc(var(--jvc-tab-width) / var(--jvc-tab-size));border-radius:4px;cursor:pointer}
